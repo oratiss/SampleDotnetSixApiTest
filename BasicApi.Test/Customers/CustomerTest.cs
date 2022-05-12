@@ -3,6 +3,11 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using BasicApi.Test.Abstractions;
+using BasicApi.Test.Middlewares;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,12 +20,17 @@ namespace BasicApi.Test.Customers
         public CustomerTest()
         {
             
-            var application = new BaseTestServiceProvider().WithWebHostBuilder(builder =>
+            var applicationFactory = new BaseTestServiceProvider().WithWebHostBuilder(builder =>
             {
+                builder.Configure(app =>
+                {
+                    app.UseMiddleware<RollBackMiddleware>();
+                });
+
                 Server.PreserveExecutionContext = true;
             });
 
-            _client = application.CreateClient();
+            _client = applicationFactory.CreateClient();
         }
 
         [Fact]
