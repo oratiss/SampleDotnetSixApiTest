@@ -22,10 +22,10 @@ namespace BasicApi.Test.Customers
             
             var applicationFactory = new BaseTestServiceProvider().WithWebHostBuilder(builder =>
             {
-                builder.Configure(app =>
-                {
-                    app.UseMiddleware<RollBackMiddleware>();
-                });
+                //builder.Configure(app =>
+                //{
+                //    app.UseMiddleware<RollBackMiddleware>();
+                //});
 
                 Server.PreserveExecutionContext = true;
             });
@@ -49,9 +49,6 @@ namespace BasicApi.Test.Customers
                 Console.WriteLine(exception.Message);
                 throw;
             }
-
-
-
 
         }
     }
